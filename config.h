@@ -90,4 +90,19 @@
 #define RENDER_DELAY_MS 150  // Reduced from 200ms to 150ms for better viewing
 #define MAX_SIMULATION_STEPS 10000
 
+// Debug mode control - DISABLE by default for smooth rendering
+#define ENABLE_SIMULATION_LOGGING 0  // Set to 1 for debug, 0 for production
+
+// Debug logging macros
+#if ENABLE_SIMULATION_LOGGING
+    #define LOG_ANT_INFO(format, ...) print_info(format, __VA_ARGS__)
+    #define LOG_PHEROMONE_INFO(format, ...) print_info(format, __VA_ARGS__)
+    #define LOG_WORLD_INFO(format, ...) print_info(format, __VA_ARGS__)
+#else
+    #define LOG_ANT_INFO(format, ...) // No-op when disabled
+    #define LOG_PHEROMONE_INFO(format, ...) // No-op when disabled  
+    #define LOG_WORLD_INFO(format, ...) // No-op when disabled
+#endif
+
 #endif // CONFIG_H
+
