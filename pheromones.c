@@ -21,8 +21,8 @@ void deposit_pheromone(World* world, Ant* ant) {
             cell->pheromone_home = PHEROMONE_MAX;
         }
         
-        print_info("Ant %d deposited home pheromone at (%d, %d), level: %.1f", 
-                  ant->id, ant->pos.x, ant->pos.y, cell->pheromone_home);
+        LOG_PHEROMONE_INFO("Ant %d deposited home pheromone at (%d, %d), level: %.1f", 
+                           ant->id, ant->pos.x, ant->pos.y, cell->pheromone_home);
         
     } else if (ant->state & ANT_STATE_RETURNING) {
         // Returning ants deposit food pheromone
@@ -31,8 +31,8 @@ void deposit_pheromone(World* world, Ant* ant) {
             cell->pheromone_food = PHEROMONE_MAX;
         }
         
-        print_info("Ant %d deposited food pheromone at (%d, %d), level: %.1f", 
-                  ant->id, ant->pos.x, ant->pos.y, cell->pheromone_food);
+        LOG_PHEROMONE_INFO("Ant %d deposited food pheromone at (%d, %d), level: %.1f", 
+                           ant->id, ant->pos.x, ant->pos.y, cell->pheromone_food);
     }
 }
 
