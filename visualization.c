@@ -296,6 +296,10 @@ void render_world(const World* world) {
     printf("                                                        \n");
 
     set_color(COLOR_WHITE);
+    
+    // Push cursor below display area to prevent message overflow
+    printf("\n\n\n\n\n");
+    fflush(stdout);
 }
 
 void render_ant(const Ant* ant, int x, int y) {
