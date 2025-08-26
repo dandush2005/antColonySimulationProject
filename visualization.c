@@ -20,22 +20,16 @@ void request_full_redraw(void)   { g_full_redraw = 1; }
 
 // The ONLY function the main loop should call per tick
 void render_frame(const World* world) {
-    // For now, we clear every frame. If you want zero blink later,
-    // switch to a true console backbuffer (WriteConsoleOutputCharacterA).
-    clear_screen();
+    // Move cursor to top-left instead of clearing entire screen
+    gotoxy(0, 0);
 
     switch (g_view) {
         case VIEW_WORLD:
-            render_world(world); // must be linear: no gotoxy, no clear, no fflush
+            render_world(world);
             break;
         case VIEW_ANT_LIST:
-            // If you keep an ant list screen, implement a linear version and
-            // call it here. Otherwise, leave this case empty.
-            // render_ant_list(world);
             break;
         case VIEW_MENU:
-            // Menus are typically handled outside the sim loop; keep empty or
-            // add a linear renderer if needed.
             break;
     }
 
@@ -282,22 +276,24 @@ void render_world(const World* world) {
 
     // Compact stats/legend/controls printed **below** the map (no positioning)
     set_color(COLOR_WHITE);
-    printf("\nSIMULATION STATISTICS\n");
-    printf("Step: %d\n", world->current_step);
-    printf("Status: %s\n", world->paused ? "PAUSED" : "RUNNING");
-    printf("Colonies: %d\n", world->colony_count);
+    printf("\nSIMULATION STATISTICS                           \n");
+    printf("Step: %-8d Status: %-15s                    \n", 
+           world->current_step, world->paused ? "PAUSED" : "RUNNING");
+    printf("Colonies: %-5d                                    \n", world->colony_count);
     for (int i = 0; i < world->colony_count; ++i) {
         const Colony* col = &world->colonies[i];
         set_color(get_colony_color(col->id));
         printf("Colony %d  ", col->id);
         set_color(COLOR_WHITE);
-        printf("Food: %d  Ants: %d/%d  Eff: %.2f\n",
+        printf("Food: %-4d Ants: %-2d/%-2d Eff: %-6.2f            \n",
                col->food_collected, col->active_ants, col->total_ants, col->efficiency_score);
     }
 
-    printf("\nLEGEND  F=Food  N=Nest  %c/%c=Ant  walls=%c  trails=.:*# (ASCII) or ░▒▓█\n",
+    printf("                                                        \n");
+    printf("LEGEND  F=Food N=Nest %c/%c=Ant %c=Wall                \n",
            ANT_SEARCH(), ANT_CARRY(), WALL_BLOCK());
-    printf("CONTROLS  SPACE Pause  S Save  L Load  R Reset  +/- Speed  Q Quit\n");
+    printf("CONTROLS SPACE=Pause S=Save Q=Quit +/-=Speed           \n");
+    printf("                                                        \n");
 
     set_color(COLOR_WHITE);
 }
