@@ -97,7 +97,7 @@ void move_ant(Ant* ant, World* world, int direction) {
         // Add to path history
         add_path_node(ant, ant->pos, 0.0f);
         
-        print_info("Ant %d moved to (%d, %d)", ant->id, new_x, new_y);
+        LOG_ANT_INFO("Ant %d moved to (%d, %d)", ant->id, new_x, new_y);
     } else {
         print_warning("Ant %d cannot move to (%d, %d)", new_x, new_y);
     }
@@ -123,7 +123,7 @@ void move_randomly(Ant* ant, World* world) {
     }
     
     // If no valid direction found, don't move
-    print_warning("Ant %d could not find valid random direction", ant->id);
+    LOG_ANT_INFO("Ant %d could not find valid random direction", ant->id);
 }
 
 void follow_pheromone_gradient(Ant* ant, World* world, int pheromone_type) {
@@ -149,8 +149,8 @@ void follow_pheromone_gradient(Ant* ant, World* world, int pheromone_type) {
     // Move to best direction if pheromone found
     if (best_direction >= 0 && max_pheromone > 0.0f) {
         move_ant(ant, world, best_direction);
-        print_info("Ant %d following pheromone gradient (type %d, strength %.1f)", 
-                  ant->id, pheromone_type, max_pheromone);
+        LOG_ANT_INFO("Ant %d following pheromone gradient (type %d, strength %.1f)", 
+                     ant->id, pheromone_type, max_pheromone);
     } else {
         // No pheromone trail found, move randomly
         move_randomly(ant, world);
@@ -208,8 +208,8 @@ void update_ant(World* world, Ant* ant) {
                 ant->preferred_direction = reverse_direction;
             }
             
-            print_info("Ant %d picked up food at (%d, %d)", 
-                      ant->id, ant->last_pos.x, ant->last_pos.y);
+            LOG_ANT_INFO("Ant %d picked up food at (%d, %d)", 
+                         ant->id, ant->last_pos.x, ant->last_pos.y);
             
             // If food depleted, clear the cell
             if (current_cell->food_amount <= 0) {
@@ -246,7 +246,7 @@ void update_ant(World* world, Ant* ant) {
             clear_ant_state(ant, ANT_STATE_RETURNING | ANT_STATE_CARRYING);
             set_ant_state(ant, ANT_STATE_SEARCHING);
             
-            print_info("Ant %d delivered food to colony %d", ant->id, ant->colony_id);
+            LOG_ANT_INFO("Ant %d delivered food to colony %d", ant->id, ant->colony_id);
             
             // Set direction to go back where we came from
             int reverse_direction = -1;
